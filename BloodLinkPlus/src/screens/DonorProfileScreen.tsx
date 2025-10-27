@@ -35,7 +35,7 @@ export const DonorProfileScreen = ({ route, navigation }: any) => {
       </View>
 
       <View style={styles.bloodGroupCard}>
-        <View style={[styles.bloodGroupBadge, { backgroundColor: Colors.bloodGroups[donor.bloodGroup] }]}>
+        <View style={[styles.bloodGroupBadge, { backgroundColor: Colors.bloodGroups[donor.bloodGroup as keyof typeof Colors.bloodGroups] }]}>
           <Ionicons name="water" size={32} color={Colors.white} />
           <Text style={styles.bloodGroupText}>{donor.bloodGroup}</Text>
         </View>
