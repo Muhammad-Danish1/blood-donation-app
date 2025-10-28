@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+BloodLinkPlus/node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*~
+
+# Misc
+.DS_Store
+*.pem
+
+# Local env files
+.env*.local
+.env
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+/tmp/
+
+# Replit
+.replit
+replit.nix
+.config/
+.cache/
+.upm/
+.local/
