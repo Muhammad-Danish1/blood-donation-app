@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, Spacing } from '../../src/theme';
+import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../../src/theme';
 import { Button, Input } from '../../src/components';
 
 export default function LoginScreen() {
@@ -20,57 +21,70 @@ export default function LoginScreen() {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Ionicons name="water" size={60} color={Colors.primary} />
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Log in to continue helping save lives</Text>
-        </View>
-
-        <View style={styles.form}>
-          <Input
-            label="Email Address"
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            leftIcon="mail-outline"
-          />
-
-          <Input
-            label="Password"
-            placeholder="Enter your password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!showPassword}
-            leftIcon="lock-closed-outline"
-          />
-
-          <TouchableOpacity style={styles.forgotPassword}>
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-          </TouchableOpacity>
-
-          <Button title="Log In" onPress={handleLogin} style={styles.loginButton} />
-
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>or continue with</Text>
-            <View style={styles.dividerLine} />
+      <LinearGradient
+        colors={[Colors.primary, Colors.primaryDark]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerContent}>
+          <View style={styles.iconContainer}>
+            <Ionicons name="water" size={48} color={Colors.white} />
           </View>
+          <Text style={styles.headerTitle}>Welcome Back</Text>
+          <Text style={styles.headerSubtitle}>Log in to continue helping save lives</Text>
+        </View>
+      </LinearGradient>
 
-          <Button
-            title="Continue with Google"
-            onPress={() => {}}
-            variant="outline"
-            style={styles.googleButton}
-          />
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent} 
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
+        <View style={styles.formContainer}>
+          <View style={styles.form}>
+            <Input
+              label="Email Address"
+              placeholder="Enter your email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              leftIcon="mail-outline"
+            />
 
-          <View style={styles.signupContainer}>
-            <Text style={styles.signupText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => router.push('/(auth)/signup')}>
-              <Text style={styles.signupLink}>Sign Up</Text>
+            <Input
+              label="Password"
+              placeholder="Enter your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              leftIcon="lock-closed-outline"
+            />
+
+            <TouchableOpacity style={styles.forgotPassword}>
+              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
+
+            <Button title="Log In" onPress={handleLogin} style={styles.loginButton} />
+
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or continue with</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            <TouchableOpacity style={styles.googleButton}>
+              <Ionicons name="logo-google" size={20} color={Colors.text.primary} />
+              <Text style={styles.googleButtonText}>Continue with Google</Text>
+            </TouchableOpacity>
+
+            <View style={styles.signupContainer}>
+              <Text style={styles.signupText}>Don't have an account? </Text>
+              <TouchableOpacity onPress={() => router.push('/(auth)/signup')}>
+                <Text style={styles.signupLink}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -83,29 +97,52 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
   },
-  scrollContent: {
-    flexGrow: 1,
+  headerGradient: {
+    paddingTop: Spacing['3xl'] + 20,
+    paddingBottom: Spacing['2xl'],
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing['4xl'],
+    borderBottomLeftRadius: BorderRadius['3xl'],
+    borderBottomRightRadius: BorderRadius['3xl'],
   },
-  header: {
+  headerContent: {
     alignItems: 'center',
-    marginBottom: Spacing.xl,
   },
-  title: {
-    fontSize: Typography.fontSize['3xl'],
+  iconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
+  headerTitle: {
+    fontSize: Typography.fontSize['4xl'],
     fontWeight: Typography.fontWeight.bold,
-    color: Colors.text.primary,
-    marginTop: Spacing.md,
+    color: Colors.white,
+    marginBottom: Spacing.xs,
   },
-  subtitle: {
+  headerSubtitle: {
     fontSize: Typography.fontSize.base,
-    color: Colors.text.secondary,
-    marginTop: Spacing.xs,
+    color: Colors.white,
+    opacity: 0.9,
     textAlign: 'center',
   },
-  form: {
+  scrollContent: {
+    flexGrow: 1,
+  },
+  formContainer: {
     flex: 1,
+    marginTop: -Spacing.lg,
+  },
+  form: {
+    backgroundColor: Colors.white,
+    borderTopLeftRadius: BorderRadius['2xl'],
+    borderTopRightRadius: BorderRadius['2xl'],
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.xl,
+    ...Shadows.lg,
   },
   forgotPassword: {
     alignSelf: 'flex-end',
@@ -114,6 +151,7 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     color: Colors.secondary,
     fontSize: Typography.fontSize.sm,
+    fontWeight: Typography.fontWeight.medium,
   },
   loginButton: {
     marginBottom: Spacing.lg,
@@ -134,7 +172,22 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.sm,
   },
   googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: Colors.border.medium,
+    borderRadius: BorderRadius.md,
+    paddingVertical: Spacing.md,
     marginBottom: Spacing.lg,
+    ...Shadows.sm,
+  },
+  googleButtonText: {
+    fontSize: Typography.fontSize.base,
+    fontWeight: Typography.fontWeight.medium,
+    color: Colors.text.primary,
+    marginLeft: Spacing.sm,
   },
   signupContainer: {
     flexDirection: 'row',
