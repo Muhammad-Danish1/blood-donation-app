@@ -4,11 +4,12 @@
 BloodLink+ is an enterprise-grade mobile blood donation platform built with Expo (React Native) and TypeScript. The app connects blood donors and recipients through real-time location tracking, map visualization, and smart search filters with a trustworthy, medical-grade UI.
 
 **Created:** October 27, 2025  
-**Status:** MVP Complete ✓
+**Last Updated:** October 28, 2025  
+**Status:** Expo Router Migration Complete ✓ | Modernization In Progress
 
 ## Tech Stack
 - **Framework:** Expo (React Native) with TypeScript
-- **Navigation:** React Navigation (Stack + Bottom Tabs)
+- **Navigation:** Expo Router (File-based routing)
 - **Maps:** react-native-maps (Google Maps)
 - **Styling:** React Native StyleSheet (no CSS-in-JS)
 - **Icons:** @expo/vector-icons (Ionicons)
@@ -36,6 +37,24 @@ BloodLink+ is an enterprise-grade mobile blood donation platform built with Expo
 ## Project Structure
 ```
 BloodLinkPlus/
+├── app/                    # Expo Router file-based routing
+│   ├── _layout.tsx         # Root layout
+│   ├── index.tsx           # Splash screen (/)
+│   ├── onboarding.tsx      # Onboarding flow
+│   ├── (auth)/             # Auth route group
+│   │   ├── _layout.tsx     # Auth layout
+│   │   ├── login.tsx       # Login screen
+│   │   ├── signup.tsx      # Signup screen
+│   │   └── profile-setup.tsx
+│   ├── (tabs)/             # Tab navigator group
+│   │   ├── _layout.tsx     # Tab layout
+│   │   ├── index.tsx       # Home screen (default tab)
+│   │   ├── map.tsx         # Map screen
+│   │   ├── requests.tsx    # Requests screen
+│   │   └── settings.tsx    # Settings screen
+│   ├── donor-profile.tsx   # Modal: Donor details
+│   ├── request-blood.tsx   # Modal: Blood request form
+│   └── chat.tsx            # Modal: Messaging
 ├── src/
 │   ├── theme/              # Design system tokens
 │   │   ├── colors.ts       # Color palette
@@ -49,25 +68,8 @@ BloodLinkPlus/
 │   │   ├── StatusBadge.tsx # Color-coded status indicators
 │   │   ├── FAB.tsx         # Floating action button
 │   │   └── index.ts
-│   ├── screens/            # All app screens
-│   │   ├── SplashScreen.tsx
-│   │   ├── OnboardingScreen.tsx
-│   │   ├── LoginScreen.tsx
-│   │   ├── SignupScreen.tsx
-│   │   ├── ProfileSetupScreen.tsx
-│   │   ├── HomeScreen.tsx
-│   │   ├── MapScreen.tsx
-│   │   ├── DonorProfileScreen.tsx
-│   │   ├── RequestBloodScreen.tsx
-│   │   ├── ChatScreen.tsx
-│   │   ├── MyRequestsScreen.tsx
-│   │   ├── SettingsScreen.tsx
-│   │   └── index.ts
-│   ├── navigation/         # Navigation setup
-│   │   └── AppNavigator.tsx
 │   └── data/               # Mock data
 │       └── mockData.ts
-├── App.tsx                 # Entry point
 └── package.json
 ```
 
@@ -127,22 +129,24 @@ The app includes realistic mock data for demonstration:
 - **8 cities** for location selection
 - **8 blood groups** (A+, A-, B+, B-, AB+, AB-, O+, O-)
 
-## Navigation Structure
+## Navigation Structure (Expo Router)
 ```
-Splash
-  └─> Onboarding
-       └─> Login <──> Signup
-            └─> ProfileSetup
-                 └─> Main (Tab Navigator)
-                      ├─> Home
-                      ├─> Map
-                      ├─> Requests
-                      └─> Settings
-                           
-Modal/Stack Screens:
-├─> DonorProfile
-├─> RequestBlood
-└─> Chat
+/                          → Splash Screen (index.tsx)
+/onboarding               → Onboarding Flow
+/(auth)/login            → Login Screen
+/(auth)/signup           → Signup Screen
+/(auth)/profile-setup    → Profile Setup
+
+/(tabs)/                  → Main Tab Navigation
+  ├─> / (index)          → Home Screen
+  ├─> /map               → Map Screen
+  ├─> /requests          → My Requests Screen
+  └─> /settings          → Settings Screen
+
+Modal Screens:
+├─> /donor-profile       → Donor Details
+├─> /request-blood       → Blood Request Form
+└─> /chat                → Messaging
 ```
 
 ## Design Tone
@@ -155,6 +159,22 @@ The UI follows medical app design principles with:
 - Accessible touch targets (44x44px minimum)
 - Color-coded status indicators
 - Soft shadows for depth
+
+## Recent Changes (October 28, 2025)
+### Completed:
+- ✅ **Expo Router Migration** - Migrated from React Navigation to Expo Router for file-based routing
+  - Created app directory with proper route groups
+  - Implemented (auth) and (tabs) route groups
+  - Converted all 12 screens to use router hooks (useRouter, useLocalSearchParams)
+  - Updated package.json entry point to expo-router/entry
+  - Added expo-router scheme configuration
+  - All navigation now uses push/replace/back instead of navigation props
+
+### Currently Working On:
+- [ ] Modern UI/UX redesign with animations and glassmorphism effects
+- [ ] Enhanced color palette and design system
+- [ ] Improved component library with modern variants
+- [ ] Backend API development (Node.js + Express + MongoDB)
 
 ## Next Steps (Future v2 Features)
 - [ ] Update package versions to Expo-recommended ranges
