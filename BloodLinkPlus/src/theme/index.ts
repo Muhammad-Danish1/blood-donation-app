@@ -1,11 +1,16 @@
-export { Colors } from './colors';
-export { Typography } from './typography';
-export { Spacing, BorderRadius, Shadows } from './spacing';
+import { Colors } from './colors';
+import { Typography } from './typography';
+import { Spacing, BorderRadius, Shadows, Animations, Blur, Opacity } from './spacing';
+
+export { Colors, Typography, Spacing, BorderRadius, Shadows, Animations, Blur, Opacity };
 
 export const Theme = {
-  colors: require('./colors').Colors,
-  typography: require('./typography').Typography,
-  spacing: require('./spacing').Spacing,
-  borderRadius: require('./spacing').BorderRadius,
-  shadows: require('./spacing').Shadows,
+  colors: Colors,
+  typography: Typography,
+  spacing: Spacing,
+  borderRadius: BorderRadius,
+  shadows: Shadows,
+  animations: Animations,
+  blur: Blur,
+  opacity: Opacity,
 };
