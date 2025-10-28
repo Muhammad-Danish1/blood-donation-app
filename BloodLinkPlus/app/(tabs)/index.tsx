@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../../src/theme';
 import { Card, StatusBadge } from '../../src/components';
@@ -9,7 +10,7 @@ import { mockDonors } from '../../src/data/mockData';
 export default function HomeScreen() {
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState('All');
-  const filters = ['All', 'A+', 'O+', 'B+', 'AB+', 'Nearby'];
+  const filters = ['All', 'A+', 'O+', 'B+', 'AB+', 'A-', 'O-', 'B-', 'AB-', 'Nearby'];
 
   const renderDonorCard = ({ item }: any) => (
     <TouchableOpacity
@@ -51,24 +52,33 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Find Donors</Text>
-          <Text style={styles.subgreeting}>Connect with verified blood donors</Text>
-        </View>
-        <TouchableOpacity style={styles.notificationButton}>
-          <Ionicons name="notifications-outline" size={24} color={Colors.text.primary} />
-          <View style={styles.badge} />
-        </TouchableOpacity>
-      </View>
+      <LinearGradient
+        colors={[Colors.primary, Colors.primaryDark]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerContent}>
+          <View style={styles.headerTop}>
+            <View>
+              <Text style={styles.greeting}>Find Donors</Text>
+              <Text style={styles.subgreeting}>Connect with life-savers near you</Text>
+            </View>
+            <TouchableOpacity style={styles.notificationButton}>
+              <Ionicons name="notifications-outline" size={24} color={Colors.white} />
+              <View style={styles.badge} />
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={Colors.text.secondary} />
-        <Text style={styles.searchPlaceholder}>Search by blood group or city</Text>
-        <TouchableOpacity>
-          <Ionicons name="options-outline" size={20} color={Colors.text.secondary} />
-        </TouchableOpacity>
-      </View>
+          <View style={styles.searchContainer}>
+            <Ionicons name="search" size={20} color={Colors.text.secondary} />
+            <Text style={styles.searchPlaceholder}>Search by blood group or city</Text>
+            <TouchableOpacity>
+              <Ionicons name="options-outline" size={20} color={Colors.text.secondary} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </LinearGradient>
 
       <ScrollView
         horizontal
@@ -97,20 +107,29 @@ export default function HomeScreen() {
         ))}
       </ScrollView>
 
-      <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>Available Donors</Text>
-        <TouchableOpacity onPress={() => router.push('/(tabs)/map')}>
-          <Text style={styles.viewMapText}>View on Map</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.contentContainer}>
+        <View style={styles.headerRow}>
+          <View style={styles.sectionTitleContainer}>
+            <Ionicons name="people" size={20} color={Colors.primary} />
+            <Text style={styles.sectionTitle}>Available Donors</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.mapButton}
+            onPress={() => router.push('/(tabs)/map')}
+          >
+            <Ionicons name="map" size={16} color={Colors.secondary} />
+            <Text style={styles.viewMapText}>Map View</Text>
+          </TouchableOpacity>
+        </View>
 
-      <FlatList
-        data={mockDonors}
-        renderItem={renderDonorCard}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-      />
+        <FlatList
+          data={mockDonors}
+          renderItem={renderDonorCard}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </View>
   );
 }
@@ -120,48 +139,61 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background.secondary,
   },
-  header: {
+  headerGradient: {
+    paddingTop: Spacing['3xl'] + 20,
+    paddingBottom: Spacing.xl,
+    paddingHorizontal: Spacing.xl,
+    borderBottomLeftRadius: BorderRadius['3xl'],
+    borderBottomRightRadius: BorderRadius['3xl'],
+  },
+  headerContent: {
+    gap: Spacing.md,
+  },
+  headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xl + 20,
-    paddingBottom: Spacing.md,
-    backgroundColor: Colors.white,
+    alignItems: 'flex-start',
   },
   greeting: {
-    fontSize: Typography.fontSize['2xl'],
+    fontSize: Typography.fontSize['3xl'],
     fontWeight: Typography.fontWeight.bold,
-    color: Colors.text.primary,
+    color: Colors.white,
   },
   subgreeting: {
-    fontSize: Typography.fontSize.sm,
-    color: Colors.text.secondary,
-    marginTop: 2,
+    fontSize: Typography.fontSize.base,
+    color: Colors.white,
+    opacity: 0.9,
+    marginTop: Spacing.xs,
   },
   notificationButton: {
     position: 'relative',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   badge: {
     position: 'absolute',
-    top: 0,
-    right: 0,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.primary,
+    top: 8,
+    right: 8,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: Colors.accent,
+    borderWidth: 2,
+    borderColor: Colors.white,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.md,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm + 4,
-    borderRadius: BorderRadius.md,
+    borderRadius: BorderRadius.lg,
     gap: Spacing.sm,
-    ...Shadows.sm,
+    ...Shadows.md,
   },
   searchPlaceholder: {
     flex: 1,
@@ -170,19 +202,20 @@ const styles = StyleSheet.create({
   },
   filterScroll: {
     marginTop: Spacing.md,
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   filterContent: {
     paddingHorizontal: Spacing.xl,
     gap: Spacing.sm,
   },
   filterChip: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs + 2,
+    paddingHorizontal: Spacing.md + 4,
+    paddingVertical: Spacing.xs + 4,
     borderRadius: BorderRadius.full,
     backgroundColor: Colors.white,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: Colors.border.light,
+    ...Shadows.sm,
   },
   filterChipActive: {
     backgroundColor: Colors.primary,
@@ -191,10 +224,18 @@ const styles = StyleSheet.create({
   filterText: {
     fontSize: Typography.fontSize.sm,
     color: Colors.text.primary,
-    fontWeight: Typography.fontWeight.medium,
+    fontWeight: Typography.fontWeight.semibold,
   },
   filterTextActive: {
     color: Colors.white,
+  },
+  contentContainer: {
+    flex: 1,
+    marginTop: -Spacing.md,
+    backgroundColor: Colors.background.secondary,
+    borderTopLeftRadius: BorderRadius['2xl'],
+    borderTopRightRadius: BorderRadius['2xl'],
+    paddingTop: Spacing.lg,
   },
   headerRow: {
     flexDirection: 'row',
@@ -203,15 +244,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     marginBottom: Spacing.md,
   },
+  sectionTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+  },
   sectionTitle: {
     fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.semibold,
+    fontWeight: Typography.fontWeight.bold,
     color: Colors.text.primary,
+  },
+  mapButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs - 2,
+    backgroundColor: Colors.white,
+    paddingHorizontal: Spacing.sm + 4,
+    paddingVertical: Spacing.xs + 2,
+    borderRadius: BorderRadius.full,
+    ...Shadows.sm,
   },
   viewMapText: {
     fontSize: Typography.fontSize.sm,
     color: Colors.secondary,
-    fontWeight: Typography.fontWeight.medium,
+    fontWeight: Typography.fontWeight.semibold,
   },
   list: {
     paddingHorizontal: Spacing.xl,

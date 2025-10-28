@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, Spacing, BorderRadius } from '../../src/theme';
+import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../../src/theme';
 import { Card, StatusBadge, FAB } from '../../src/components';
 import { mockRequests } from '../../src/data/mockData';
 
@@ -11,12 +12,41 @@ export default function MyRequestsScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>My Requests</Text>
-        <TouchableOpacity>
-          <Ionicons name="filter-outline" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-      </View>
+      <LinearGradient
+        colors={[Colors.gradients.warm[0], Colors.gradients.warm[1]]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerContent}>
+          <View style={styles.headerTop}>
+            <View>
+              <Text style={styles.title}>My Requests</Text>
+              <Text style={styles.subtitle}>Track your blood requests</Text>
+            </View>
+            <TouchableOpacity style={styles.filterButton}>
+              <Ionicons name="filter-outline" size={20} color={Colors.white} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{mockRequests.filter(r => r.status === 'open').length}</Text>
+              <Text style={styles.statLabel}>Active</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{mockRequests.filter(r => r.status === 'accepted').length}</Text>
+              <Text style={styles.statLabel}>Accepted</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{mockRequests.length}</Text>
+              <Text style={styles.statLabel}>Total</Text>
+            </View>
+          </View>
+        </View>
+      </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {mockRequests.map((request) => (
@@ -95,23 +125,72 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background.secondary,
   },
-  header: {
+  headerGradient: {
+    paddingTop: Spacing['3xl'] + 20,
+    paddingBottom: Spacing.xl,
+    paddingHorizontal: Spacing.xl,
+    borderBottomLeftRadius: BorderRadius['3xl'],
+    borderBottomRightRadius: BorderRadius['3xl'],
+  },
+  headerContent: {
+    gap: Spacing.md,
+  },
+  headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xl + 20,
-    paddingBottom: Spacing.md,
-    backgroundColor: Colors.white,
+    alignItems: 'flex-start',
   },
   title: {
+    fontSize: Typography.fontSize['3xl'],
+    fontWeight: Typography.fontWeight.bold,
+    color: Colors.white,
+  },
+  subtitle: {
+    fontSize: Typography.fontSize.base,
+    color: Colors.white,
+    opacity: 0.9,
+    marginTop: Spacing.xs,
+  },
+  filterButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statsRow: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.md,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statValue: {
     fontSize: Typography.fontSize['2xl'],
     fontWeight: Typography.fontWeight.bold,
-    color: Colors.text.primary,
+    color: Colors.white,
+  },
+  statLabel: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.white,
+    opacity: 0.9,
+    marginTop: 2,
+  },
+  statDivider: {
+    width: 1,
+    height: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   content: {
     paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.xl,
   },
   requestCard: {
     marginBottom: Spacing.md,

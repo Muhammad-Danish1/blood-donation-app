@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, Spacing, BorderRadius } from '../../src/theme';
+import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../../src/theme';
 import { Card } from '../../src/components';
 
 export default function SettingsScreen() {
@@ -27,29 +28,39 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Settings</Text>
-      </View>
+      <LinearGradient
+        colors={[Colors.gradients.purple[0], Colors.gradients.purple[1]]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerContent}>
+          <Text style={styles.title}>Settings</Text>
+          <Text style={styles.subtitle}>Manage your account & preferences</Text>
+        </View>
+      </LinearGradient>
 
-      <Card style={styles.profileCard}>
-        <View style={styles.profileHeader}>
-          <Image
-            source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
-            style={styles.avatar}
-          />
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>Sarah Johnson</Text>
-            <Text style={styles.profileEmail}>sarah.j@email.com</Text>
-            <View style={styles.bloodGroupBadge}>
-              <Ionicons name="water" size={14} color={Colors.white} />
-              <Text style={styles.bloodGroupText}>A+</Text>
+      <View style={styles.content}>
+        <Card style={styles.profileCard}>
+          <View style={styles.profileHeader}>
+            <Image
+              source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
+              style={styles.avatar}
+            />
+            <View style={styles.profileInfo}>
+              <Text style={styles.profileName}>Sarah Johnson</Text>
+              <Text style={styles.profileEmail}>sarah.j@email.com</Text>
+              <View style={styles.bloodGroupBadge}>
+                <Ionicons name="water" size={14} color={Colors.white} />
+                <Text style={styles.bloodGroupText}>A+</Text>
+              </View>
             </View>
           </View>
-        </View>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
-      </Card>
+          <TouchableOpacity style={styles.editButton}>
+            <Ionicons name="create-outline" size={18} color={Colors.primary} />
+            <Text style={styles.editButtonText}>Edit Profile</Text>
+          </TouchableOpacity>
+        </Card>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Preferences</Text>
@@ -142,6 +153,7 @@ export default function SettingsScreen() {
       <View style={styles.footer}>
         <Text style={styles.version}>Version 1.0.0</Text>
       </View>
+      </View>
     </ScrollView>
   );
 }
@@ -151,20 +163,34 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background.secondary,
   },
-  header: {
+  headerGradient: {
+    paddingTop: Spacing['3xl'] + 20,
+    paddingBottom: Spacing.xl,
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xl + 20,
-    paddingBottom: Spacing.md,
-    backgroundColor: Colors.white,
+    borderBottomLeftRadius: BorderRadius['3xl'],
+    borderBottomRightRadius: BorderRadius['3xl'],
+  },
+  headerContent: {
+    alignItems: 'center',
   },
   title: {
-    fontSize: Typography.fontSize['2xl'],
+    fontSize: Typography.fontSize['3xl'],
     fontWeight: Typography.fontWeight.bold,
-    color: Colors.text.primary,
+    color: Colors.white,
+  },
+  subtitle: {
+    fontSize: Typography.fontSize.base,
+    color: Colors.white,
+    opacity: 0.9,
+    marginTop: Spacing.xs,
+  },
+  content: {
+    marginTop: -Spacing.lg,
+    paddingTop: Spacing.lg,
   },
   profileCard: {
     marginHorizontal: Spacing.xl,
-    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   profileHeader: {
     flexDirection: 'row',
@@ -207,16 +233,20 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   editButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.xs,
     borderWidth: 1,
     borderColor: Colors.primary,
     borderRadius: BorderRadius.md,
-    paddingVertical: Spacing.xs + 2,
-    alignItems: 'center',
+    paddingVertical: Spacing.xs + 4,
+    ...Shadows.sm,
   },
   editButtonText: {
     fontSize: Typography.fontSize.sm,
     color: Colors.primary,
-    fontWeight: Typography.fontWeight.medium,
+    fontWeight: Typography.fontWeight.semibold,
   },
   section: {
     marginTop: Spacing.lg,

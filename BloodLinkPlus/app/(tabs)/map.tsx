@@ -1,26 +1,65 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors, Typography, Spacing, BorderRadius } from '../../src/theme';
+import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../../src/theme';
 import { StatusBadge, Card } from '../../src/components';
 import { mockDonors } from '../../src/data/mockData';
 
 export default function MapScreen() {
   const router = useRouter();
+  const [selectedBloodGroup, setSelectedBloodGroup] = useState('All');
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Donor Map</Text>
-      </View>
+      <LinearGradient
+        colors={[Colors.secondary, Colors.secondaryDark]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerContent}>
+          <Text style={styles.headerTitle}>Donor Map</Text>
+          <Text style={styles.headerSubtitle}>Find donors near you</Text>
+          
+          <View style={styles.statsContainer}>
+            <View style={styles.stat}>
+              <Ionicons name="people" size={20} color={Colors.white} />
+              <Text style={styles.statNumber}>{mockDonors.length}</Text>
+              <Text style={styles.statLabel}>Donors</Text>
+            </View>
+            <View style={styles.stat}>
+              <Ionicons name="location" size={20} color={Colors.white} />
+              <Text style={styles.statNumber}>5km</Text>
+              <Text style={styles.statLabel}>Radius</Text>
+            </View>
+            <View style={styles.stat}>
+              <Ionicons name="time" size={20} color={Colors.white} />
+              <Text style={styles.statNumber}>24/7</Text>
+              <Text style={styles.statLabel}>Available</Text>
+            </View>
+          </View>
+        </View>
+      </LinearGradient>
 
-      <View style={styles.webMapPlaceholder}>
-        <Ionicons name="map" size={80} color={Colors.border.medium} />
-        <Text style={styles.webMapText}>Map view is available on mobile</Text>
-        <Text style={styles.webMapSubtext}>
-          Download the BloodLink+ mobile app to see donors on an interactive map
-        </Text>
+      <View style={styles.mapPlaceholder}>
+        <LinearGradient
+          colors={[Colors.background.tertiary, Colors.white]}
+          style={styles.mapGradient}
+        >
+          <View style={styles.mapIconContainer}>
+            <Ionicons name="map" size={60} color={Colors.secondary} />
+          </View>
+          <Text style={styles.webMapText}>Interactive Map</Text>
+          <Text style={styles.webMapSubtext}>
+            Map view shows all nearby donors in real-time
+          </Text>
+          <TouchableOpacity style={styles.mockMapButton}>
+            <Ionicons name="navigate-circle" size={20} color={Colors.white} />
+            <Text style={styles.mockMapButtonText}>Enable Location</Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
 
       <ScrollView style={styles.donorList} contentContainerStyle={styles.donorListContent}>
@@ -64,38 +103,102 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background.secondary,
   },
-  header: {
+  headerGradient: {
+    paddingTop: Spacing['3xl'] + 20,
+    paddingBottom: Spacing.xl,
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xl + 20,
-    paddingBottom: Spacing.md,
-    backgroundColor: Colors.white,
-    flexDirection: 'row',
+    borderBottomLeftRadius: BorderRadius['3xl'],
+    borderBottomRightRadius: BorderRadius['3xl'],
+  },
+  headerContent: {
     alignItems: 'center',
-    justifyContent: 'center',
   },
   headerTitle: {
-    fontSize: Typography.fontSize['2xl'],
+    fontSize: Typography.fontSize['3xl'],
     fontWeight: Typography.fontWeight.bold,
-    color: Colors.text.primary,
+    color: Colors.white,
   },
-  webMapPlaceholder: {
-    backgroundColor: Colors.background.tertiary,
-    paddingVertical: Spacing['4xl'],
+  headerSubtitle: {
+    fontSize: Typography.fontSize.base,
+    color: Colors.white,
+    opacity: 0.9,
+    marginTop: Spacing.xs,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+    marginTop: Spacing.lg,
+  },
+  stat: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    minWidth: 80,
+  },
+  statNumber: {
+    fontSize: Typography.fontSize.xl,
+    fontWeight: Typography.fontWeight.bold,
+    color: Colors.white,
+    marginTop: Spacing.xs - 2,
+  },
+  statLabel: {
+    fontSize: Typography.fontSize.xs,
+    color: Colors.white,
+    opacity: 0.9,
+  },
+  mapPlaceholder: {
+    height: 240,
+    marginHorizontal: Spacing.xl,
+    marginTop: -Spacing.lg,
+    borderRadius: BorderRadius['2xl'],
+    overflow: 'hidden',
+    ...Shadows.lg,
+  },
+  mapGradient: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: Spacing.xl,
+  },
+  mapIconContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+    ...Shadows.md,
   },
   webMapText: {
-    fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.semibold,
+    fontSize: Typography.fontSize.xl,
+    fontWeight: Typography.fontWeight.bold,
     color: Colors.text.primary,
-    marginTop: Spacing.lg,
   },
   webMapSubtext: {
     fontSize: Typography.fontSize.sm,
     color: Colors.text.secondary,
     marginTop: Spacing.xs,
     textAlign: 'center',
-    paddingHorizontal: Spacing.xl,
+    maxWidth: 250,
+  },
+  mockMapButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    backgroundColor: Colors.secondary,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm + 4,
+    borderRadius: BorderRadius.full,
+    marginTop: Spacing.md,
+    ...Shadows.md,
+  },
+  mockMapButtonText: {
+    fontSize: Typography.fontSize.base,
+    fontWeight: Typography.fontWeight.semibold,
+    color: Colors.white,
   },
   donorList: {
     flex: 1,

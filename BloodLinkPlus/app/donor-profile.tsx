@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../src/theme';
 import { Card, StatusBadge, Button } from '../src/components';
@@ -13,37 +14,42 @@ export default function DonorProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Donor Profile</Text>
-        <TouchableOpacity style={styles.shareButton}>
-          <Ionicons name="share-outline" size={24} color={Colors.text.primary} />
-        </TouchableOpacity>
-      </View>
+      <LinearGradient
+        colors={[Colors.primary, Colors.primaryDark]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.headerGradient}
+      >
+        <View style={styles.headerTop}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={Colors.white} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Donor Profile</Text>
+          <TouchableOpacity style={styles.shareButton}>
+            <Ionicons name="share-outline" size={24} color={Colors.white} />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.profileHeader}>
+          <Image source={{ uri: donor.profilePhoto }} style={styles.avatar} />
+          <View style={styles.verifiedBadge}>
+            {donor.verified && (
+              <Ionicons name="checkmark-circle" size={28} color={Colors.secondary} />
+            )}
+          </View>
+        </View>
+
+        <Text style={styles.name}>{donor.name}</Text>
+        <View style={styles.bloodGroupContainer}>
+          <View style={styles.bloodGroupBadge}>
+            <Ionicons name="water" size={20} color={Colors.white} />
+            <Text style={styles.bloodGroupText}>{donor.bloodGroup}</Text>
+          </View>
+          <StatusBadge status={donor.availability} size="md" />
+        </View>
+      </LinearGradient>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Card style={styles.profileCard}>
-          <View style={styles.profileHeader}>
-            <Image source={{ uri: donor.profilePhoto }} style={styles.avatar} />
-            <View style={styles.verifiedBadge}>
-              {donor.verified && (
-                <Ionicons name="checkmark-circle" size={24} color={Colors.secondary} />
-              )}
-            </View>
-          </View>
-
-          <Text style={styles.name}>{donor.name}</Text>
-          <View style={styles.bloodGroupContainer}>
-            <View style={styles.bloodGroupBadge}>
-              <Ionicons name="water" size={20} color={Colors.white} />
-              <Text style={styles.bloodGroupText}>{donor.bloodGroup}</Text>
-            </View>
-            <StatusBadge status={donor.availability} size="md" />
-          </View>
-        </Card>
-
         <Card style={styles.infoCard}>
           <Text style={styles.sectionTitle}>Contact Information</Text>
           <View style={styles.infoRow}>
@@ -98,34 +104,45 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background.secondary,
   },
-  header: {
+  headerGradient: {
+    paddingTop: Spacing['3xl'] + 20,
+    paddingBottom: Spacing.xl,
+    paddingHorizontal: Spacing.xl,
+    alignItems: 'center',
+    borderBottomLeftRadius: BorderRadius['3xl'],
+    borderBottomRightRadius: BorderRadius['3xl'],
+  },
+  headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.xl + 20,
-    paddingBottom: Spacing.md,
-    backgroundColor: Colors.white,
-    ...Shadows.sm,
+    width: '100%',
+    marginBottom: Spacing.lg,
   },
   backButton: {
-    padding: Spacing.xs,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: Typography.fontSize.lg,
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.text.primary,
+    fontWeight: Typography.fontWeight.bold,
+    color: Colors.white,
   },
   shareButton: {
-    padding: Spacing.xs,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
     flex: 1,
-  },
-  profileCard: {
-    margin: Spacing.xl,
-    alignItems: 'center',
-    paddingVertical: Spacing.xl,
+    marginTop: -Spacing.md,
   },
   profileHeader: {
     position: 'relative',
@@ -137,6 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.full,
     borderWidth: 4,
     borderColor: Colors.white,
+    ...Shadows.md,
   },
   verifiedBadge: {
     position: 'absolute',
@@ -144,18 +162,20 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: Colors.white,
     borderRadius: BorderRadius.full,
-    padding: 2,
+    padding: 3,
+    ...Shadows.sm,
   },
   name: {
     fontSize: Typography.fontSize['2xl'],
     fontWeight: Typography.fontWeight.bold,
-    color: Colors.text.primary,
-    marginBottom: Spacing.sm,
+    color: Colors.white,
+    marginBottom: Spacing.xs,
   },
   bloodGroupContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,
+    marginBottom: Spacing.md,
   },
   bloodGroupBadge: {
     flexDirection: 'row',
